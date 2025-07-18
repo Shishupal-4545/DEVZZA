@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>My Account - Devzza</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
+  <style>
+    :root {
+      --light-bg: #fff8f0;
+      --dark-bg: #2e1a0e;
+      --card-light: #ffffff;
+      --card-dark: #3a2212;
+      --text-dark: #f8e7d0;
+      --primary-color: #d2691e;
+      --primary-hover: #a0522d;
+      --danger: #c0392b;
+    }
+
+    body {
+      background: var(--light-bg);
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+    }
+
+    body.dark-mode {
+      background-color: var(--dark-bg);
+      color: var(--text-dark);
+    }
+
+    .main-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: linear-gradient(to right, #d2691e, #e6b07e);
+      padding: 12px 24px;
+      flex-wrap: wrap;
+    }
+
+    .logo-section {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .logo {
+      height: 48px;
+      width: 48px;
+      object-fit: contain;
+      border-radius: 8px;
+      background-color: white;
+      padding: 4px;
+    }
+
+    .brand-name {
+      font-size: 1.7em;
+      font-weight: bold;
+      color: white;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .nav-link {
+      margin: 6px 6px;
+      padding: 6px 14px;
+      background-color: var(--primary-color);
+      color: white;
+      border-radius: 20px;
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 14px;
+      transition: background-color 0.3s;
+    }
+
+    .nav-link:hover {
+      background-color: var(--primary-hover);
+    }
+
+    #themePicker {
+      margin-left: 12px;
+      padding: 6px 10px;
+      border-radius: 20px;
+      font-weight: bold;
+    }
+
+    .dashboard-container {
+      max-width: 900px;
+      margin: auto;
+      padding: 40px 20px;
+    }
+
+    .section {
+      background: var(--card-light);
+      padding: 20px;
+      margin-bottom: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    }
+
+    body.dark-mode .section {
+      background-color: var(--card-dark);
+      color: var(--text-dark);
+    }
+
+    h2 {
+      color: var(--primary-color);
+      margin-bottom: 10px;
+      font-size: 1.5em;
+    }
+
+    .edit-btn, .save-btn, .cancel-btn, .cancel-order-btn, .locate-btn {
+      background-color: var(--primary-color);
+      color: white;
+      border: none;
+      padding: 8px 14px;
+      border-radius: 6px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+
+    .cancel-order-btn {
+      background-color: var(--danger);
+      margin-left: 10px;
+    }
+
+    .cancel-order-btn:hover {
+      background-color: #a93226;
+    }
+
+    .locate-btn {
+      background-color: #3b8a3b;
+      margin-left: 10px;
+    }
+
+    .locate-btn:hover {
+      background-color: #2c6e2c;
+    }
+
+    input[type="text"] {
+      padding: 8px;
+      width: 100%;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      margin-top: 8px;
+    }
+
+    body.dark-mode input[type="text"] {
+      background-color: #5c3a24;
+      color: white;
+      border: 1px solid #aaa;
+    }
+
+    .order-card {
+      border: 1px solid #eee;
+      border-radius: 10px;
+      padding: 15px;
+      margin-bottom: 15px;
+    }
+
+    body.dark-mode .order-card {
+      border-color: #5a3d2d;
+      background-color: #3e2414;
+    }
+
+    .order-status {
+      font-weight: bold;
+      padding: 3px 10px;
+      border-radius: 20px;
+      display: inline-block;
+      text-transform: capitalize;
+    }
+
+    .pending { background: #ffecb3; color: #e67e22; }
+    .preparing { background: #d0ebff; color: #3498db; }
+    .out { background: #e8daef; color: #8e44ad; }
+    .delivered { background: #d4edda; color: #2e7d32; }
+    .cancelled { background: #f8d7da; color: #c0392b; }
+
+    /* Responsive Styling */
+    @media (max-width: 768px) {
+      .main-header {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 10px 16px;
+      }
+
+      .logo-section {
+        margin-bottom: 10px;
+      }
+
+      .nav-links {
+        flex-direction: column;
+        align-items: flex-start;
+        width: 100%;
+      }
+
+      .nav-link {
+        width: 100%;
+        margin: 5px 0;
+        text-align: center;
+      }
+
+      #themePicker {
+        width: 100%;
+        margin-top: 10px;
+      }
+
+      h2 {
+        font-size: 1.3em;
+      }
+
+      .edit-btn, .save-btn, .cancel-btn, .locate-btn, .cancel-order-btn {
+        width: 100%;
+        margin-left: 0 !important;
+      }
+
+      .order-status {
+        display: block;
+        margin-top: 6px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="main-header">
+    <div class="logo-section">
+      <a href="home.html">
+        <img src="/image/logo.png" alt="Devzza Logo" class="logo">
+      </a>
+      <span class="brand-name">DEVZZA</span>
+    </div>
+    <nav class="nav-links">
+      <a href="menu.html" class="nav-link">Menu</a>
+      <a href="contact.html" class="nav-link">Contact</a>
+      <a href="#" onclick="logout()" class="nav-link">Logout</a>
+      <select id="themePicker">
+        <option value="light">🌞 Light</option>
+        <option value="dark">🌙 Dark</option>
+      </select>
+    </nav>
+  </header>
+
+  <div class="dashboard-container">
+    <div class="section">
+      <h2>📱 My Profile</h2>
+      <p><strong>Phone:</strong> <span id="userPhone">Loading...</span></p>
+      <div id="locationSection">
+        <p><strong>Location:</strong> <span id="userLocation">Loading...</span></p>
+        <button class="edit-btn" onclick="showEditLocation()">Edit Location</button>
+      </div>
+      <div id="editLocationBox" style="display:none">
+        <input type="text" id="newLocation" placeholder="Enter new location" />
+        <button class="locate-btn" onclick="useCurrentLocation()">📍 Use Current Location</button>
+        <button class="save-btn" onclick="saveLocation()">Save</button>
+        <button class="cancel-btn" onclick="hideEditLocation()">Cancel</button>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>🧾 Order History</h2>
+      <div id="orderList">Loading orders...</div>
+    </div>
+  </div>
+
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyDuEjfd5ndWCKuLducjQWt6mOJIoh9QzEE",
+      authDomain: "devzza.firebaseapp.com",
+      projectId: "devzza",
+      storageBucket: "devzza.firebasestorage.app",
+      messagingSenderId: "565980928557",
+      appId: "1:565980928557:web:381abac87928e12adff6a4"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+
+    let userPhone = localStorage.getItem("userPhone");
+
+    auth.onAuthStateChanged(user => {
+      if (user) {
+        userPhone = user.phoneNumber;
+        localStorage.setItem("userPhone", userPhone);
+        document.getElementById("userPhone").innerText = userPhone;
+
+        fetch("/api/user/init", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ phone: userPhone })
+        });
+
+        fetchOrders();
+      } else if (!userPhone) {
+        alert("Please sign in to access your dashboard.");
+        window.location.href = "signin.html";
+      } else {
+        document.getElementById("userPhone").innerText = userPhone;
+        fetchOrders();
+      }
+    });
+
+    function fetchOrders() {
+      const normalizedPhone = userPhone.slice(-10);
+      fetch(`/api/order/status?phone=${encodeURIComponent(normalizedPhone)}`)
+        .then(res => res.json())
+        .then(data => {
+          const container = document.getElementById("orderList");
+          container.innerHTML = "";
+          if (data.length === 0) {
+            container.innerHTML = "<p>No orders found.</p>";
+            return;
+          }
+
+          document.getElementById("userLocation").innerText = data[0]?.location || "Not set";
+
+          data.forEach(order => {
+            const cart = JSON.parse(order.cart || "[]");
+            const items = cart.map(i => `${i.name} (x${i.qty || 1})`).join(", ");
+            const status = order.status ? order.status.toLowerCase() : "pending";
+            const statusClass = status.includes("delivery") ? "out" : status;
+            const isCancellable = ["pending", "preparing"].includes(status);
+
+            container.innerHTML += `
+              <div class="order-card">
+                <p><strong>Order ID:</strong> ${order.id}</p>
+                <p><strong>Status:</strong> 
+                  <span class="order-status ${statusClass}">${order.status || 'Pending'}</span>
+                  ${isCancellable ? `<button class="cancel-order-btn" onclick="cancelOrder(${order.id})">Cancel</button>` : ""}
+                </p>
+                <p><strong>Items:</strong> ${items}</p>
+                <p><strong>Date:</strong> ${new Date(order.created_at).toLocaleString()}</p>
+              </div>
+            `;
+          });
+        })
+        .catch(() => {
+          document.getElementById("orderList").innerHTML = "<p>Error loading orders.</p>";
+        });
+    }
+
+    function cancelOrder(orderId) {
+      if (!confirm("Are you sure you want to cancel this order?")) return;
+
+      fetch("/api/order/cancel", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ orderId, phone: userPhone })
+      })
+      .then(res => res.text())
+      .then(msg => {
+        alert(msg);
+        fetchOrders();
+      })
+      .catch(() => alert("❌ Failed to cancel order."));
+    }
+
+    function showEditLocation() {
+      document.getElementById("editLocationBox").style.display = "block";
+      document.getElementById("locationSection").style.display = "none";
+    }
+
+    function hideEditLocation() {
+      document.getElementById("editLocationBox").style.display = "none";
+      document.getElementById("locationSection").style.display = "block";
+    }
+
+    function saveLocation() {
+      const newLoc = document.getElementById("newLocation").value.trim();
+      if (!newLoc) return alert("Please enter a new location");
+
+      fetch("/api/order/update-location", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ phone: userPhone, location: newLoc })
+      })
+      .then(res => res.text())
+      .then(msg => {
+        alert(msg);
+        hideEditLocation();
+        fetchOrders();
+      })
+      .catch(() => alert("❌ Failed to update location."));
+    }
+
+    function useCurrentLocation() {
+      if (!navigator.geolocation) {
+        alert("Geolocation is not supported by this browser.");
+        return;
+      }
+
+      navigator.geolocation.getCurrentPosition(position => {
+        const lat = position.coords.latitude;
+        const lon = position.coords.longitude;
+
+        fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}`)
+          .then(res => res.json())
+          .then(data => {
+            document.getElementById("newLocation").value = data.display_name || `${lat}, ${lon}`;
+          })
+          .catch(() => {
+            alert("Could not fetch location name");
+          });
+
+      }, () => {
+        alert("Failed to get your location.");
+      });
+    }
+
+    function logout() {
+      firebase.auth().signOut().then(() => {
+        localStorage.removeItem("userPhone");
+        alert("You’ve been logged out.");
+        window.location.href = "signin.html";
+      });
+    }
+
+    // 🌙 Theme toggle
+    const themePicker = document.getElementById('themePicker');
+    const savedTheme = localStorage.getItem('siteTheme') || 'light';
+    document.body.classList.toggle('dark-mode', savedTheme === 'dark');
+    themePicker.value = savedTheme;
+
+    themePicker.addEventListener('change', function () {
+      const selected = themePicker.value;
+      document.body.classList.toggle('dark-mode', selected === 'dark');
+      localStorage.setItem('siteTheme', selected);
+    });
+  </script>
+</body>
+</html>

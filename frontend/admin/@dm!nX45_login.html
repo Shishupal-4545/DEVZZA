@@ -1,0 +1,252 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Devzza - Cart</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    .cart-container {
+      padding: 40px 20px;
+      background-color: #fff8f0;
+      min-height: 100vh;
+    }
+    .cart-title {
+      font-size: 2em;
+      color: #8b4513;
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    .cart-items {
+      max-width: 700px;
+      margin: auto;
+      padding: 20px;
+      background: white;
+      border-radius: 15px;
+      box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+    }
+    .cart-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 0;
+      border-bottom: 1px solid #eee;
+    }
+    .cart-name {
+      flex: 1;
+      font-weight: 500;
+    }
+    .cart-qty {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .cart-qty button {
+      padding: 4px 8px;
+      border: none;
+      background: #d2691e;
+      color: white;
+      border-radius: 4px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    .form-input {
+      width: 100%;
+      padding: 12px;
+      margin-top: 10px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+    }
+    .form-btn {
+      background-color: #d2691e;
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      margin-top: 20px;
+      width: 100%;
+      border-radius: 8px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    .form-btn:hover {
+      background-color: #a0522d;
+    }
+    .total-price {
+      font-size: 1.2em;
+      margin-top: 15px;
+      text-align: right;
+    }
+  </style>
+</head>
+<body>
+  <header class="main-header">
+    <div class="logo-section">
+      <a href="home.html">
+        <img src="/image/logo.png" alt="Devzza Logo" class="logo" />
+      </a>
+      <span class="brand-name">DEVZZA</span>
+    </div>
+    <nav class="nav-links">
+      <a href="home.html" class="nav-link">Home</a>
+      <a href="menu.html" class="nav-link">Menu</a>
+      <a href="cart.html" class="nav-link">Cart</a>
+    </nav>
+  </header>
+
+  <div class="cart-container">
+    <h2 class="cart-title">🛒 Your Cart</h2>
+    <div class="cart-items" id="cartList"></div>
+    <div class="total-price">Total: ₹<span id="totalAmount">0</span></div>
+
+    <h3>📍 Delivery Details</h3>
+    <input type="text" id="phone" placeholder="Phone Number" class="form-input" required />
+    <input type="text" id="location" placeholder="Delivery Location" class="form-input" required />
+    <button onclick="placeOrder()" class="form-btn">Place Order</button>
+  </div>
+
+  <script>
+    let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+    function renderCart() {
+      const list = document.getElementById("cartList");
+      const totalEl = document.getElementById("totalAmount");
+      list.innerHTML = "";
+      let total = 0;
+
+      cart.forEach((item, index) => {
+        total += item.price * item.qty;
+
+        const div = document.createElement("div");
+        div.className = "cart-item";
+        div.innerHTML = `
+          <span class="cart-name">${item.name} - ₹${item.price}</span>
+          <div class="cart-qty">
+            <button onclick="decreaseQty(${index})">−</button>
+            <span>${item.qty}</span>
+            <button onclick="increaseQty(${index})">+</button>
+          </div>
+        `;
+        list.appendChild(div);
+      });
+
+      totalEl.textContent = total;
+    }
+
+    function increaseQty(index) {
+      cart[index].qty += 1;
+      saveCart();
+    }
+
+    function decreaseQty(index) {
+      if (cart[index].qty > 1) {
+        cart[index].qty -= 1;
+      } else {
+        cart.splice(index, 1); // remove item if qty is 0
+      }
+      saveCart();
+    }
+
+    function saveCart() {
+      localStorage.setItem("cart", JSON.stringify(cart));
+      renderCart();
+    }
+
+    function placeOrder() {
+      const phone = document.getElementById("phone").value.trim();
+      const location = document.getElementById("location").value.trim();
+      if (!phone || !location || cart.length === 0) {
+        return alert("📦 Please complete all fields and have at least 1 item.");
+      }
+
+      const orderItems = cart.map(item => ({
+        name: item.name,
+        price: item.price,
+        qty: item.qty
+      }));
+
+      // fetch("/api/order", {
+      //   method: "POST",
+      //   headers: { "Content-Type": "application/json" },
+      //   body: JSON.stringify({ phone, location, cart: orderItems })
+      // })
+      // .then(res => res.text())
+      // .then(msg => {
+      //   alert(msg);
+      //   localStorage.removeItem("cart");
+      //   window.location.href = "order_confirmed.html";
+      // });
+      fetch("/api/order", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ phone, location, cart: orderItems })
+      })
+      .then(res => {
+        if (!res.ok) throw new Error("Failed to place order");
+        return res.text();
+      })
+      .then(msg => {
+        alert(msg); // Shows "✅ Order placed successfully!"
+        localStorage.removeItem("cart");
+        window.location.href = "order_confirmed.html";
+      })
+      .catch(err => {
+        alert("❌ Order failed: " + err.message);
+      });
+
+    }
+
+    // Initialize quantities if missing
+    cart = cart.map(item => item.qty ? item : { ...item, qty: 1 });
+    saveCart();
+  </script>
+</body>
+</html> -->
+
+
+
+
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Admin Login - Devzza</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="admin.css" />
+</head>
+<body>
+
+  <div class="admin-login-container">
+    <div class="admin-logo">
+      <img src="/image/logo.png" alt="Devzza Logo" />
+      <h1>DEVZZA ADMIN</h1>
+    </div>
+
+    <div class="admin-login-box">
+      <h2>Admin Login</h2>
+      <input type="text" id="username" placeholder="Username" required />
+      <input type="password" id="password" placeholder="Password" required />
+      <button onclick="login()">Login</button>
+    </div>
+  </div>
+
+  <script>
+    function login() {
+      const username = document.getElementById('username').value.trim();
+      const password = document.getElementById('password').value.trim();
+
+      if (username === 'admin' && password === 'devzza123') {
+        sessionStorage.setItem("adminToken", "admin-access-token");
+        window.location.href = 'dashboard.html';
+      } else {
+        alert('Invalid credentials!');
+      }
+    }
+  </script>
+
+</body>
+</html>

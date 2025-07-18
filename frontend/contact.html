@@ -1,0 +1,347 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Devzza - Contact</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="main-header">
+    <div class="logo-section">
+      <a href="home.html">
+        <img src="/image/logo.png" alt="Devzza Logo" class="logo">
+      </a>
+      <span class="brand-name">DEVZZA</span>
+    </div>
+    <nav class="nav-links">
+      <a href="home.html" class="nav-link">Home</a>
+      <a href="menu.html" class="nav-link">Menu</a>
+      <a href="contact.html" class="nav-link">Contact</a>
+    </nav>
+  </header>
+
+  <div class="contact-container">
+    <h2 class="menu-title">Get in Touch</h2>
+    <p class="contact-subtext">We’d love to hear from you! Whether you have a question about our pizzas or want to share your feedback.</p>
+
+    <form class="contact-form" onsubmit="sendContact(); return false;">
+      <input type="text" id="name" name="name" placeholder="Your Name" required>
+      <input type="email" id="email" name="email" placeholder="Your Email" required>
+      <textarea id="message" name="message" placeholder="Your Message" rows="5" required></textarea>
+      <button type="submit" class="get-started">Send Message</button>
+    </form>
+
+    <div class="contact-info">
+      <p>📍 Address: Pizza Lane, Cheesy Street, Food City 123456</p>
+      <p>📞 Phone: +91 98765 43210</p>
+      <p>✉️ Email: support@devzza.com</p>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <p>🍕 Devzza &copy; 2025 | Built with Love and Cheese</p>
+  </footer>
+
+  <script>
+    function sendContact() {
+      const name = document.getElementById("name").value.trim();
+      const email = document.getElementById("email").value.trim();
+      const message = document.getElementById("message").value.trim();
+
+      if (!name || !email || !message) {
+        alert("Please fill in all fields.");
+        return;
+      }
+
+      fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, email, message })
+      })
+      .then(res => res.text())
+      .then(msg => {
+        alert(msg);
+        document.getElementById("name").value = "";
+        document.getElementById("email").value = "";
+        document.getElementById("message").value = "";
+      })
+      .catch(err => {
+        alert("❌ Failed to send: " + err.message);
+      });
+    }
+  </script>
+
+</body>
+</html> -->
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Devzza - Contact</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    :root {
+      --light-bg: #fef6f0;
+      --dark-bg: #2e1a0e;
+      --dark-card: #3c2614;
+      --dark-text: #fff0d6;
+      --dark-placeholder: #ffdca8;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: var(--light-bg);
+      color: #333;
+    }
+
+    body.dark-mode {
+      background-color: var(--dark-bg);
+      color: var(--dark-text);
+    }
+
+    .main-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: linear-gradient(to right, #d2691e, #e6b07e);
+      padding: 12px 24px;
+      flex-wrap: wrap;
+    }
+
+    .logo-section {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .logo {
+      height: 48px;
+      width: 48px;
+      object-fit: contain;
+      border-radius: 8px;
+      background-color: #fff8f0;
+      padding: 4px;
+    }
+
+    .brand-name {
+      font-size: 1.7em;
+      font-weight: bold;
+      color: #fff8f0;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+    }
+
+    .nav-link {
+      margin-left: 10px;
+      padding: 6px 14px;
+      background-color: #d2691e;
+      color: white;
+      border-radius: 20px;
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 14px;
+      transition: background-color 0.3s;
+    }
+
+    .nav-link:hover {
+      background-color: #a0522d;
+    }
+
+    .contact-container {
+      max-width: 600px;
+      margin: 40px auto;
+      padding: 20px;
+      background-color: white;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    body.dark-mode .contact-container {
+      background-color: var(--dark-card);
+    }
+
+    .menu-title {
+      text-align: center;
+      font-size: 28px;
+      margin-bottom: 10px;
+      color: #d2691e;
+    }
+
+    body.dark-mode .menu-title {
+      color: #ffcc66;
+    }
+
+    .contact-subtext {
+      text-align: center;
+      font-size: 16px;
+      margin-bottom: 20px;
+      color: #555;
+    }
+
+    body.dark-mode .contact-subtext {
+      color: var(--dark-placeholder);
+    }
+
+    .contact-form input,
+    .contact-form textarea {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 14px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 15px;
+      background: #fff8f0;
+      color: #000;
+    }
+
+    body.dark-mode .contact-form input,
+    body.dark-mode .contact-form textarea {
+      background-color: #4e3522;
+      color: var(--dark-text);
+      border: 1px solid #a57c5b;
+    }
+
+    body.dark-mode input::placeholder,
+    body.dark-mode textarea::placeholder {
+      color: var(--dark-placeholder);
+    }
+
+    .get-started {
+      background: #ffcc00;
+      color: black;
+      font-weight: bold;
+      border: none;
+      padding: 10px 20px;
+      font-size: 16px;
+      border-radius: 25px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+      display: block;
+      width: 100%;
+    }
+
+    .get-started:hover {
+      background: #e6b800;
+    }
+
+    .contact-info {
+      margin-top: 30px;
+      font-size: 15px;
+      color: #555;
+    }
+
+    body.dark-mode .contact-info {
+      color: var(--dark-text);
+    }
+
+    .footer {
+      text-align: center;
+      padding: 20px;
+      background: #f8f8f8;
+      font-size: 14px;
+      color: #777;
+      margin-top: 40px;
+    }
+
+    body.dark-mode .footer {
+      background-color: #3c2614;
+      color: #ddd;
+    }
+
+    #themePicker {
+      margin-left: 12px;
+      padding: 6px 10px;
+      border-radius: 20px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <header class="main-header">
+    <div class="logo-section">
+      <a href="home.html">
+        <img src="/image/logo.png" alt="Devzza Logo" class="logo">
+      </a>
+      <span class="brand-name">DEVZZA</span>
+    </div>
+    <nav class="nav-links">
+      <a href="home.html" class="nav-link">Home</a>
+      <a href="menu.html" class="nav-link">Menu</a>
+      <select id="themePicker">
+        <option value="light">🌞 Light</option>
+        <option value="dark">🌙 Dark</option>
+      </select>
+    </nav>
+  </header>
+
+  <div class="contact-container">
+    <h2 class="menu-title">Get in Touch</h2>
+    <p class="contact-subtext">
+      We’d love to hear from you! Whether you have a question about our pizzas or want to share your feedback.
+    </p>
+
+    <form class="contact-form" onsubmit="sendContact(); return false;">
+      <input type="text" id="name" name="name" placeholder="Your Name" required>
+      <input type="email" id="email" name="email" placeholder="Your Email" required>
+      <textarea id="message" name="message" placeholder="Your Message" rows="5" required></textarea>
+      <button type="submit" class="get-started">Send Message</button>
+    </form>
+
+    <div class="contact-info">
+      <p>📍 Address: vill-chakhamind, post-birjumilki, police station-harnaut, district-nalanda, state-bihar, pin code-803110</p>
+      <p>📞 Phone: +91 91137 53523</p>
+      <p>✉️ Email: shishupalk655@gmail.com</p>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <p>🍕 Devzza &copy; 2025 | Built with Love and Cheese</p>
+  </footer>
+
+  <script>
+    function sendContact() {
+      const name = document.getElementById("name").value.trim();
+      const email = document.getElementById("email").value.trim();
+      const message = document.getElementById("message").value.trim();
+
+      if (!name || !email || !message) {
+        alert("Please fill in all fields.");
+        return;
+      }
+
+      fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, email, message })
+      })
+      .then(res => {
+        if (!res.ok) throw new Error("Failed to send message");
+        return res.text();
+      })
+      .then(msg => {
+        window.location.href = "feedback_success.html";
+      })
+      .catch(err => {
+        alert("❌ Failed to send: " + err.message);
+      });
+    }
+
+    const themePicker = document.getElementById('themePicker');
+    const savedTheme = localStorage.getItem('siteTheme') || 'light';
+    document.body.classList.toggle('dark-mode', savedTheme === 'dark');
+    themePicker.value = savedTheme;
+
+    themePicker.addEventListener('change', function () {
+      const selected = themePicker.value;
+      document.body.classList.toggle('dark-mode', selected === 'dark');
+      localStorage.setItem('siteTheme', selected);
+    });
+  </script>
+</body>
+</html>

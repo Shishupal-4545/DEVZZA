@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Thank You - Devzza</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    :root {
+      --light-bg: #fff8f0;
+      --dark-bg: #2e1a0e;
+      --dark-text: #ffeed0;
+      --primary-color: #d2691e;
+      --hover-color: #a0522d;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: var(--light-bg);
+      color: #333;
+    }
+
+    body.dark-mode {
+      background-color: var(--dark-bg);
+      color: var(--dark-text);
+    }
+
+    .main-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: linear-gradient(to right, #d2691e, #e6b07e);
+      padding: 12px 24px;
+    }
+
+    .logo-section {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .logo {
+      height: 48px;
+      width: 48px;
+      object-fit: contain;
+      border-radius: 8px;
+      background-color: #fff8f0;
+      padding: 4px;
+    }
+
+    .brand-name {
+      font-size: 1.7em;
+      font-weight: bold;
+      color: #fff8f0;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+    }
+
+    .nav-link {
+      margin-left: 10px;
+      padding: 6px 14px;
+      background-color: var(--primary-color);
+      color: white;
+      border-radius: 20px;
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 14px;
+      transition: background-color 0.3s;
+    }
+
+    .nav-link:hover {
+      background-color: var(--hover-color);
+    }
+
+    #themePicker {
+      margin-left: 12px;
+      padding: 6px 10px;
+      border-radius: 20px;
+      font-weight: bold;
+    }
+
+    .thanks-container {
+      text-align: center;
+      padding: 60px 20px;
+      max-width: 600px;
+      margin: 60px auto;
+      background-color: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+    }
+
+    body.dark-mode .thanks-container {
+      background-color: #3c2614;
+    }
+
+    .thanks-container h2 {
+      color: var(--primary-color);
+      font-size: 2em;
+      margin-bottom: 20px;
+    }
+
+    body.dark-mode .thanks-container h2 {
+      color: #ffcc66;
+    }
+
+    .thanks-container p {
+      font-size: 1.1em;
+      color: #444;
+    }
+
+    body.dark-mode .thanks-container p {
+      color: var(--dark-text);
+    }
+
+    .thanks-container a {
+      display: inline-block;
+      margin-top: 30px;
+      background-color: var(--primary-color);
+      color: white;
+      padding: 12px 24px;
+      text-decoration: none;
+      border-radius: 8px;
+      font-weight: bold;
+      transition: background-color 0.3s ease;
+    }
+
+    .thanks-container a:hover {
+      background-color: var(--hover-color);
+    }
+
+    .footer {
+      text-align: center;
+      padding: 20px;
+      background-color: #f8f8f8;
+      font-size: 14px;
+      color: #777;
+      margin-top: 60px;
+    }
+
+    body.dark-mode .footer {
+      background-color: #3c2614;
+      color: #ddd;
+    }
+  </style>
+</head>
+<body>
+
+  <header class="main-header">
+    <div class="logo-section">
+      <a href="home.html">
+        <img src="/image/logo.png" alt="Devzza Logo" class="logo">
+      </a>
+      <span class="brand-name">DEVZZA</span>
+    </div>
+    <nav class="nav-links">
+      <a href="home.html" class="nav-link">Home</a>
+      <a href="menu.html" class="nav-link">Menu</a>
+      <a href="contact.html" class="nav-link">Contact</a>
+      <select id="themePicker">
+        <option value="light">🌞 Light</option>
+        <option value="dark">🌙 Dark</option>
+      </select>
+    </nav>
+  </header>
+
+  <div class="thanks-container">
+    <h2>🙏 Thank You for Your Feedback!</h2>
+    <p>We appreciate your message and will get back to you if needed.</p>
+    <a href="home.html">Back to Home</a>
+  </div>
+
+  <footer class="footer">
+    <p>🍕 Devzza &copy; 2025 | Built with Love and Cheese</p>
+  </footer>
+
+  <script>
+    const themePicker = document.getElementById('themePicker');
+    const savedTheme = localStorage.getItem('siteTheme') || 'light';
+    document.body.classList.toggle('dark-mode', savedTheme === 'dark');
+    themePicker.value = savedTheme;
+
+    themePicker.addEventListener('change', function () {
+      const selected = themePicker.value;
+      document.body.classList.toggle('dark-mode', selected === 'dark');
+      localStorage.setItem('siteTheme', selected);
+    });
+  </script>
+</body>
+</html>

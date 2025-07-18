@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>📬 Contact Messages</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="admin.css" />
+</head>
+<body>
+  <header class="admin-header">
+    <h1>📬 Contact Messages</h1>
+    <button class="logout" onclick="logout()">Logout</button>
+  </header>
+
+  <main class="admin-main">
+    <section class="section">
+      <label>
+        🔍 Search:
+        <input type="text" id="contactSearch" placeholder="Search by name or email..." />
+      </label>
+
+      <!-- ✅ Change ID to feedbackTable to match admin.js -->
+      <table id="feedbackTable">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Message</th>
+            <th>Date</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </section>
+  </main>
+
+  <script src="admin.js"></script>
+</body>
+</html>

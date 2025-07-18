@@ -1,0 +1,172 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Devzza Admin Dashboard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="../style.css" />
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f5f5f5;
+      padding: 30px;
+    }
+    h1, h2 {
+      color: #8b4513;
+    }
+    .section {
+      margin-bottom: 50px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 15px;
+      background-color: white;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    }
+    th, td {
+      padding: 12px;
+      border: 1px solid #eee;
+      font-size: 0.95em;
+    }
+    th {
+      background-color: #8b4513;
+      color: white;
+    }
+    tr:nth-child(even) {
+      background-color: #fafafa;
+    }
+    .logout {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      padding: 10px 16px;
+      background-color: #d9534f;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    .logout:hover {
+      background-color: #c9302c;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>📊 Admin Dashboard</h1>
+  <button class="logout" onclick="logout()">Logout</button>
+
+  <div class="section">
+    <h2>📦 All Orders</h2>
+    <table id="ordersTable">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Phone</th>
+          <th>Location</th>
+          <th>Items</th>
+          <th>Date</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+
+  <div class="section">
+    <h2>📬 Contact Messages</h2>
+    <table id="contactsTable">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Message</th>
+          <th>Date</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+
+  <script>
+    // Redirect if not logged in
+    if (sessionStorage.getItem("adminToken") !== "admin-access-token") {
+      window.location.href = "@dm!nX45_login.html";
+    }
+
+    // Fetch and render orders
+    fetch('/api/admin/orders')
+      .then(res => res.json())
+      .then(data => {
+        const tbody = document.querySelector('#ordersTable tbody');
+        data.forEach(row => {
+          const cart = JSON.parse(row.cart || '[]');
+          const items = cart.map(i => `${i.name} (x${i.qty || 1})`).join(", ");
+          tbody.innerHTML += `
+            <tr>
+              <td>${row.id}</td>
+              <td>${row.phone}</td>
+              <td>${row.location}</td>
+              <td>${items}</td>
+              <td>${new Date(row.created_at).toLocaleString()}</td>
+            </tr>`;
+        });
+      });
+
+    // Fetch and render contact messages
+    fetch('/api/admin/contacts')
+      .then(res => res.json())
+      .then(data => {
+        const tbody = document.querySelector('#contactsTable tbody');
+        data.forEach(row => {
+          tbody.innerHTML += `
+            <tr>
+              <td>${row.id}</td>
+              <td>${row.name}</td>
+              <td>${row.email}</td>
+              <td>${row.message}</td>
+              <td>${new Date(row.created_at).toLocaleString()}</td>
+            </tr>`;
+        });
+      });
+
+    function logout() {
+      sessionStorage.removeItem("adminToken");
+      window.location.href = "login.html";
+    }
+  </script>
+</body>
+</html> -->
+
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Devzza Admin Dashboard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="admin.css" />
+</head>
+<body>
+  <header class="admin-header">
+    <h1>📊 Admin Dashboard</h1>
+    <button class="logout" onclick="logout()">Logout</button>
+  </header>
+
+  <main class="admin-main">
+    <div class="dashboard-buttons">
+      <a href="orders.html" class="dash-btn">Order List</a>
+      <a href="users.html" class="dash-btn">User List</a>
+      <a href="contact.html" class="dash-btn">Contact</a>
+      <a href="menu.html"   class="dash-btn large">Manage Menu</a>
+    </div>
+  </main>
+
+  <script src="admin.js"></script>
+</body>
+</html>

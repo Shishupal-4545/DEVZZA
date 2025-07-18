@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Order Confirmed | Devzza</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- Firebase Auth -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
+
+  <style>
+    :root {
+      --primary: #d2691e;
+      --primary-dark: #a0522d;
+      --light-bg: #fff8f0;
+      --dark-bg: #2e1a0e;
+      --card-light: #ffffff;
+      --card-dark: #3c2614;
+      --text-light: #333;
+      --text-dark: #ffe7c9;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: var(--light-bg);
+      color: var(--text-light);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      transition: background 0.3s ease, color 0.3s ease;
+    }
+
+    body.dark-mode {
+      background: var(--dark-bg);
+      color: var(--text-dark);
+    }
+
+    .logo-top {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+    }
+
+    .logo-top img {
+      height: 44px;
+      width: auto;
+      border-radius: 8px;
+      background-color: #fff;
+      padding: 2px;
+    }
+
+    .confirmation-box {
+      text-align: center;
+      background: var(--card-light);
+      padding: 40px 30px;
+      border-radius: 16px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+      max-width: 450px;
+      width: 90%;
+      transition: background 0.3s ease;
+    }
+
+    body.dark-mode .confirmation-box {
+      background: var(--card-dark);
+    }
+
+    .confirmation-box img {
+      height: 100px;
+      margin-bottom: 20px;
+    }
+
+    .confirmation-box h1 {
+      color: var(--primary);
+      margin-bottom: 10px;
+    }
+
+    .confirmation-box p {
+      font-size: 1em;
+      margin-bottom: 18px;
+    }
+
+    .home-btn {
+      padding: 12px 30px;
+      background-color: var(--primary);
+      color: white;
+      font-weight: bold;
+      border: none;
+      border-radius: 25px;
+      font-size: 1em;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    .home-btn:hover {
+      background-color: var(--primary-dark);
+    }
+
+    #themePicker {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-weight: bold;
+      border: 1px solid #ccc;
+    }
+
+    @media (max-width: 500px) {
+      .confirmation-box {
+        padding: 30px 20px;
+      }
+
+      .home-btn {
+        padding: 10px 25px;
+        font-size: 0.95em;
+      }
+
+      #themePicker {
+        top: 15px;
+        right: 15px;
+      }
+
+      .logo-top {
+        top: 15px;
+        left: 15px;
+      }
+
+      .logo-top img {
+        height: 38px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Mini logo section -->
+  <div class="logo-top">
+    <a href="home.html">
+      <img src="/image/logo.png" alt="Devzza Logo">
+    </a>
+  </div>
+
+  <!-- Theme switcher -->
+  <select id="themePicker">
+    <option value="light">🌞 Light</option>
+    <option value="dark">🌙 Dark</option>
+  </select>
+
+  <div class="confirmation-box">
+    <img src="/image/logo.png" alt="Devzza Logo" />
+    <h1>🎉 Thank You!</h1>
+    <p>Your order has been received and is being prepared with love.</p>
+    <p>You’ll get a confirmation message shortly 🍕</p>
+    <a href="home.html" class="home-btn">Back to Home</a>
+  </div>
+
+  <script>
+    const themePicker = document.getElementById("themePicker");
+    const savedTheme = localStorage.getItem("siteTheme") || "light";
+    document.body.classList.toggle("dark-mode", savedTheme === "dark");
+    themePicker.value = savedTheme;
+
+    themePicker.addEventListener("change", () => {
+      const selected = themePicker.value;
+      document.body.classList.toggle("dark-mode", selected === "dark");
+      localStorage.setItem("siteTheme", selected);
+    });
+
+    // Optional: Firebase config (not mandatory here but kept for consistency)
+    const firebaseConfig = {
+      apiKey: "AIzaSyDuEjfd5ndWCKuLducjQWt6mOJIoh9QzEE",
+      authDomain: "devzza.firebaseapp.com",
+      projectId: "devzza",
+      storageBucket: "devzza.appspot.com",
+      messagingSenderId: "565980928557",
+      appId: "1:565980928557:web:381abac87928e12adff6a4"
+    };
+    firebase.initializeApp(firebaseConfig);
+  </script>
+</body>
+</html>

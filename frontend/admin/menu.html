@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>🍕 Manage Menu</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="admin.css" />
+</head>
+<body>
+  <header class="admin-header">
+    <h1>🍕 Pizza Menu</h1>
+    <button onclick="logout()">Logout</button>
+  </header>
+
+  <main class="admin-main">
+    <button onclick="showAddForm()">➕ Add Pizza</button>
+
+    <!-- ✅ Add/Edit Pizza Form -->
+    <section id="formSection" style="display: none;">
+      <h2 id="formTitle">Add Pizza</h2>
+      <form id="pizzaForm" enctype="multipart/form-data">
+        <input type="hidden" name="id" />
+
+        <label>Name: <input type="text" name="name" required /></label><br />
+        <label>Price: <input type="number" name="price" required /></label><br />
+        <label>Discount: <input type="number" name="discount" /></label><br />
+        <label>Category: <input type="text" name="category" /></label><br />
+        <label>Stock: <input type="number" name="stock" /></label><br />
+        <label>Description: <textarea name="description"></textarea></label><br />
+
+        <!-- Image input + preview -->
+        <label>
+          Image: <input type="file" name="image" accept="image/*" onchange="previewImage(this)" />
+        </label><br />
+        <img id="imagePreview" src="" alt="Image Preview" style="max-width: 100px; display: none; border: 1px solid #ccc; padding: 4px;" /><br />
+
+        <button type="submit">💾 Save</button>
+        <button type="button" onclick="hideForm()">❌ Cancel</button>
+      </form>
+    </section>
+
+
+
+    <!-- ✅ Menu Table -->
+    <section class="section">
+      <table id="menuTable">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Price</th>
+            <th>Discount</th>
+            <th>Category</th>
+            <th>Stock</th>
+            <th>Image</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </section>
+  </main>
+
+  <script src="admin.js"></script>
+</body>
+</html>

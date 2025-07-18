@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Devzza - Home</title>
+  <link rel="stylesheet" href="style.css">
+
+  <!-- Firebase Auth -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
+
+  <style>
+    :root {
+      --primary-color: #d2691e;
+      --primary-dark: #a0522d;
+      --light-bg: #fff8f0;
+      --dark-bg: #2e1a0e;
+      --text-light: #333;
+      --text-dark: #f8e7d0;
+      --card-light: #fff;
+      --card-dark: #3a2212;
+      --quote-light: #ffe7c0;
+      --quote-dark: #4a2f1b;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: var(--light-bg);
+      color: var(--text-light);
+    }
+
+    body.dark-mode {
+      background-color: var(--dark-bg);
+      color: var(--text-dark);
+    }
+
+    .main-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: linear-gradient(to right, var(--primary-color), #e6b07e);
+      padding: 12px 24px;
+      flex-wrap: wrap;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .logo-section {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .logo {
+      height: 48px;
+      width: 48px;
+      object-fit: contain;
+      border-radius: 8px;
+      background-color: white;
+      padding: 4px;
+    }
+
+    .brand-name {
+      font-size: 1.7em;
+      font-weight: bold;
+      color: white;
+      letter-spacing: 1px;
+    }
+
+    .nav-links .nav-link,
+    .nav-profile,
+    .logout-btn {
+      display: inline-block;
+      padding: 6px 14px;
+      margin-left: 10px;
+      background-color: var(--primary-color);
+      color: white;
+      border-radius: 20px;
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 14px;
+      border: none;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .nav-link:hover,
+    .nav-profile:hover,
+    .logout-btn:hover {
+      background-color: var(--primary-dark);
+    }
+
+    .logout-btn,
+    .nav-profile {
+      display: none;
+    }
+
+    .home-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 60px 20px;
+    }
+
+    .main-logo {
+      height: 120px;
+      width: auto;
+      margin-bottom: 20px;
+    }
+
+    .highlight {
+      color: var(--primary-color);
+    }
+
+    .tagline {
+      font-size: 1.2em;
+      margin: 15px 0;
+      font-style: italic;
+    }
+
+    .get-started {
+      background-color: var(--primary-color);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      font-size: 1em;
+      font-weight: bold;
+      border-radius: 30px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .get-started:hover {
+      background-color: var(--primary-dark);
+    }
+
+    .quote-section {
+      padding: 40px 20px;
+      background-color: var(--quote-light);
+      text-align: center;
+      font-size: 1.2em;
+      font-weight: 500;
+    }
+
+    .quote-section .quote {
+      color: #1f130c; /* light mode text color */
+    }
+
+    body.dark-mode .quote-section {
+      background-color: var(--quote-dark);
+    }
+
+    body.dark-mode .quote-section .quote {
+      color: #ffe7c9; /* dark mode text color */
+    }
+
+    .footer {
+      background-color: #f2f2f2;
+      text-align: center;
+      padding: 20px;
+      color: #444;
+      font-size: 0.9em;
+    }
+
+    body.dark-mode .footer {
+      background-color: #1e1109;
+      color: #d6c2aa;
+    }
+
+    @media (max-width: 600px) {
+      .nav-links {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 8px;
+        margin-top: 10px;
+      }
+
+      .brand-name {
+        font-size: 1.4em;
+      }
+
+      .home-container {
+        flex-direction: column;
+        padding: 40px 15px;
+      }
+
+      .main-logo {
+        height: 100px;
+      }
+
+      .get-started {
+        font-size: 0.95em;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="main-header">
+    <div class="logo-section">
+      <a href="home.html">
+        <img src="/image/logo.png" alt="Devzza Logo" class="logo" />
+      </a>
+      <span class="brand-name">DEVZZA</span>
+    </div>
+    <nav class="nav-links">
+      <a href="signin.html" class="nav-link" id="signinLink">Sign In</a>
+      <a href="user_dashboard.html" class="nav-link" id="dashboardLink" style="display: none;">My Dashboard</a>
+      <a href="profile.html" class="nav-profile" id="profileLink">👤 Edit Profile</a>
+      <button class="logout-btn" id="logoutBtn" onclick="logout()">Logout</button>
+      <select id="themePicker" style="margin-left:10px; padding:4px 8px; border-radius:20px;">
+        <option value="light">🌞 Light</option>
+        <option value="dark">🌙 Dark</option>
+      </select>
+    </nav>
+  </header>
+
+  <section class="home-container">
+    <div class="left-side">
+      <img src="/image/logo.png" alt="Devzza Logo" class="main-logo">
+      <h1>Welcome to <span class="highlight">Devzza</span></h1>
+      <p class="tagline">“Where Every Slice Feels Like Heaven 🍕”</p>
+      <a href="menu.html"><button class="get-started">Get Started</button></a>
+    </div>
+  </section>
+
+  <section class="quote-section">
+    <p class="quote">"Freshly baked. Lovingly served. Devzza brings happiness in every bite."</p>
+  </section>
+
+  <footer class="footer">
+    <p>&copy; 2025 Devzza Pizza • Crafted with ❤️ for Pizza Lovers • Call us: 9113753523</p>
+  </footer>
+
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyDuEjfd5ndWCKuLducjQWt6mOJIoh9QzEE",
+      authDomain: "devzza.firebaseapp.com",
+      projectId: "devzza",
+      storageBucket: "devzza.firebasestorage.app",
+      messagingSenderId: "565980928557",
+      appId: "1:565980928557:web:381abac87928e12adff6a4"
+    };
+    firebase.initializeApp(firebaseConfig);
+
+    firebase.auth().onAuthStateChanged(user => {
+      const signin = document.getElementById("signinLink");
+      const dash = document.getElementById("dashboardLink");
+      const profile = document.getElementById("profileLink");
+      const logoutBtn = document.getElementById("logoutBtn");
+
+      if (user) {
+        signin.style.display = "none";
+        dash.style.display = "inline-block";
+        profile.style.display = "inline-block";
+        logoutBtn.style.display = "inline-block";
+      } else {
+        signin.style.display = "inline-block";
+        dash.style.display = "none";
+        profile.style.display = "none";
+        logoutBtn.style.display = "none";
+      }
+    });
+
+    function logout() {
+      firebase.auth().signOut().then(() => {
+        localStorage.removeItem("userPhone");
+        alert("You’ve been logged out.");
+        window.location.href = "signin.html";
+      });
+    }
+
+    // Theme toggle
+    const themePicker = document.getElementById("themePicker");
+    const savedTheme = localStorage.getItem("siteTheme") || "light";
+    document.body.classList.toggle("dark-mode", savedTheme === "dark");
+    themePicker.value = savedTheme;
+
+    themePicker.addEventListener("change", function () {
+      const selected = themePicker.value;
+      document.body.classList.toggle("dark-mode", selected === "dark");
+      localStorage.setItem("siteTheme", selected);
+    });
+
+    document.addEventListener("keydown", function(e) {
+      if (e.ctrlKey && e.shiftKey && e.key === "A") {
+        window.location.href = "../admin/@dm!nX45_login.html";
+      }
+    });
+  </script>
+</body>
+</html>

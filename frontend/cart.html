@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Devzza - Cart</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    :root {
+      --bg-color: #fff8f0;
+      --card-color: #ffffff;
+      --primary: #d2691e;
+      --primary-dark: #a0522d;
+      --text-color: #333;
+      --dark-bg: #1e1209;
+      --dark-card: #2e1a0e;
+      --text-light: #ffffff;
+      --text-muted: #f2e6d8;
+      --radius: 12px;
+    }
+
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: var(--bg-color);
+      margin: 0;
+      padding: 0;
+      color: var(--text-color);
+    }
+
+    body.dark-mode {
+      background-color: var(--dark-bg);
+      color: var(--text-light);
+    }
+
+    header.main-header {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: linear-gradient(to right, #d2691e, #e6b07e);
+      padding: 10px 20px;
+    }
+
+    .logo-section {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .logo {
+      height: 40px;
+      width: 40px;
+      object-fit: contain;
+      background: white;
+      border-radius: 8px;
+      padding: 4px;
+    }
+
+    .brand-name {
+      font-size: 1.4em;
+      font-weight: bold;
+      color: white;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .nav-link {
+      color: white;
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .nav-link:hover {
+      text-decoration: underline;
+    }
+
+    .cart-container {
+      padding: 40px 20px;
+      background-color: var(--bg-color);
+      min-height: 100vh;
+    }
+
+    body.dark-mode .cart-container {
+      background-color: var(--dark-bg);
+    }
+
+    .cart-title {
+      font-size: 2em;
+      color: var(--primary);
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .cart-items {
+      max-width: 700px;
+      margin: auto;
+      padding: 20px;
+      background: var(--card-color);
+      border-radius: var(--radius);
+      box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+      color: var(--text-color);
+    }
+
+    body.dark-mode .cart-items {
+      background-color: var(--dark-card);
+      color: var(--text-light);
+    }
+
+    .cart-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 0;
+      border-bottom: 1px solid #ddd;
+    }
+
+    body.dark-mode .cart-item {
+      border-color: #5e3d2a;
+    }
+
+    .cart-name {
+      flex: 1;
+      font-weight: 500;
+    }
+
+    .cart-qty {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .cart-qty button {
+      padding: 4px 8px;
+      border: none;
+      background: var(--primary);
+      color: white;
+      border-radius: 4px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    input.form-input {
+      width: 100%;
+      padding: 12px;
+      margin-top: 10px;
+      border: 1px solid #999;
+      border-radius: 8px;
+      font-size: 1em;
+      background-color: white;
+      color: var(--text-color);
+    }
+
+    body.dark-mode input.form-input {
+      background-color: #3e2b1a;
+      color: var(--text-light);
+      border-color: #aaa;
+    }
+
+    .form-input::placeholder {
+      color: #888;
+    }
+
+    body.dark-mode .form-input::placeholder {
+      color: var(--text-muted);
+    }
+
+    .form-btn {
+      background-color: var(--primary);
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      margin-top: 20px;
+      width: 100%;
+      border-radius: 8px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .form-btn:hover {
+      background-color: var(--primary-dark);
+    }
+
+    .total-price {
+      font-size: 1.2em;
+      margin-top: 15px;
+      text-align: right;
+      color: inherit;
+    }
+
+    .theme-toggle {
+      padding: 5px 8px;
+      border-radius: 6px;
+      border: none;
+      font-weight: bold;
+    }
+
+    @media (max-width: 600px) {
+      .cart-items {
+        padding: 15px;
+      }
+
+      .cart-title {
+        font-size: 1.6em;
+      }
+
+      .cart-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+      }
+
+      .total-price {
+        text-align: center;
+      }
+
+      header.main-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+      }
+
+      .nav-links {
+        flex-direction: column;
+        gap: 5px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="main-header">
+    <div class="logo-section">
+      <a href="home.html">
+        <img src="/image/logo.png" alt="Devzza Logo" class="logo" />
+      </a>
+      <span class="brand-name">DEVZZA</span>
+    </div>
+    <nav class="nav-links">
+      <a href="home.html" class="nav-link">Home</a>
+      <a href="menu.html" class="nav-link">Menu</a>
+      <select id="themePicker" class="theme-toggle">
+        <option value="light">🌞 Light</option>
+        <option value="dark">🌙 Dark</option>
+      </select>
+    </nav>
+  </header>
+
+  <div class="cart-container">
+    <h2 class="cart-title">🛒 Your Cart</h2>
+    <div class="cart-items" id="cartList"></div>
+    <div class="total-price">Total: ₹<span id="totalAmount">0</span></div>
+
+    <h3>📍 Delivery Details</h3>
+    <input type="text" id="phone" placeholder="Phone Number" class="form-input" required />
+    <input type="text" id="location" placeholder="Delivery Location" class="form-input" required />
+    <button onclick="placeOrder()" class="form-btn">Place Order</button>
+  </div>
+
+  <script>
+    // Theme logic
+    const themePicker = document.getElementById("themePicker");
+    const savedTheme = localStorage.getItem("siteTheme") || "light";
+    document.body.classList.toggle("dark-mode", savedTheme === "dark");
+    themePicker.value = savedTheme;
+
+    themePicker.addEventListener("change", () => {
+      const selected = themePicker.value;
+      document.body.classList.toggle("dark-mode", selected === "dark");
+      localStorage.setItem("siteTheme", selected);
+    });
+
+    // Cart logic
+    let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+    function renderCart() {
+      const list = document.getElementById("cartList");
+      const totalEl = document.getElementById("totalAmount");
+      list.innerHTML = "";
+      let total = 0;
+
+      cart.forEach((item, index) => {
+        total += item.price * item.qty;
+
+        const div = document.createElement("div");
+        div.className = "cart-item";
+        div.innerHTML = `
+          <span class="cart-name">${item.name} - ₹${item.price}</span>
+          <div class="cart-qty">
+            <button onclick="decreaseQty(${index})">−</button>
+            <span>${item.qty}</span>
+            <button onclick="increaseQty(${index})">+</button>
+          </div>
+        `;
+        list.appendChild(div);
+      });
+
+      totalEl.textContent = total;
+    }
+
+    function increaseQty(index) {
+      cart[index].qty += 1;
+      saveCart();
+    }
+
+    function decreaseQty(index) {
+      if (cart[index].qty > 1) {
+        cart[index].qty -= 1;
+      } else {
+        cart.splice(index, 1);
+      }
+      saveCart();
+    }
+
+    function saveCart() {
+      localStorage.setItem("cart", JSON.stringify(cart));
+      renderCart();
+    }
+
+    function placeOrder() {
+      const phone = document.getElementById("phone").value.trim();
+      const location = document.getElementById("location").value.trim();
+      if (!phone || !location || cart.length === 0) {
+        return alert("📦 Please complete all fields and have at least 1 item.");
+      }
+
+      const orderItems = cart.map(item => ({
+        name: item.name,
+        price: item.price,
+        qty: item.qty
+      }));
+
+      fetch("/api/order", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ phone, location, cart: orderItems })
+      })
+      .then(res => {
+        if (!res.ok) throw new Error("Failed to place order");
+        return res.text();
+      })
+      .then(msg => {
+        alert(msg);
+        localStorage.removeItem("cart");
+        window.location.href = "order_confirmed.html";
+      })
+      .catch(err => {
+        alert("❌ Order failed: " + err.message);
+      });
+    }
+
+    cart = cart.map(item => item.qty ? item : { ...item, qty: 1 });
+    saveCart();
+  </script>
+</body>
+</html>

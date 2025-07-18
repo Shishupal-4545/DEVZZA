@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin - Users</title>
+  <link href="https://fonts.googleapis.com/css2?family=Segoe+UI:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="admin.css" />
+</head>
+<body>
+
+  <!-- 🟤 Header -->
+  <div class="admin-header">
+    <h1>👥 User Management</h1>
+    <button class="logout" onclick="logout()">Logout</button>
+  </div>
+
+  <!-- 📋 Main Section -->
+  <div class="admin-main">
+    <div class="section">
+      <input
+        type="text"
+        id="userSearch"
+        placeholder="🔍 Search by name or phone..."
+        style="padding: 10px; width: 300px; border: 1px solid #ccc; border-radius: 6px;"
+      />
+
+      <table id="usersTable">
+        <thead>
+          <tr>
+            <th>Phone</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Status</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </div>
+
+  <script>
+    // 🔐 Admin Login Check
+    if (!sessionStorage.getItem('adminToken')) {
+      window.location = 'login.html';
+    }
+
+    // 🌐 Fetch Helper
+    async function fetchJson(url, opts) {
+      const res = await fetch(url, opts);
+      if (!res.ok) throw new Error("Network response was not ok");
+      return res.json();
+    }
+
+    // 👥 Load Users
+    let usersCache = [];
+    async function loadUsers() {
+      try {
+        usersCache = await fetchJson('/api/admin/users');
+        renderUsers(usersCache);
+      } catch (e) {
+        alert("❌ Failed to load users. Check backend route /api/admin/users");
+        console.error(e);
+      }
+    }
+
+    // 🎨 Render Users
+    function renderUsers(list) {
+      const tbody = document.querySelector('#usersTable tbody');
+      tbody.innerHTML = '';
+      list.forEach(u => {
+        tbody.innerHTML += `
+          <tr>
+            <td>${u.phone}</td>
+            <td>${u.name || '-'}</td>
+            <td>${u.email || '-'}</td>
+            <td>${u.blocked ? 'Blocked' : 'Active'}</td>
+            <td>
+              <button onclick="toggleBlock(${u.id}, ${u.blocked})"
+                style="background:${u.blocked ? '#27ae60' : '#e67e22'};padding:8px 12px;border:none;border-radius:6px;color:#fff;cursor:pointer;">
+                ${u.blocked ? 'Unblock' : 'Block'}
+              </button>
+            </td>
+          </tr>`;
+      });
+    }
+
+    // 🚫 Block/Unblock
+    async function toggleBlock(id, blocked) {
+      await fetch(`/api/admin/customers/${id}/block`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ block: !blocked })
+      });
+      loadUsers();
+    }
+
+    // 🔍 Search Users
+    document.addEventListener('DOMContentLoaded', () => {
+      document.getElementById('userSearch').oninput = e =>
+        renderUsers(
+          usersCache.filter(u =>
+            (u.name || '').toLowerCase().includes(e.target.value.toLowerCase()) ||
+            u.phone.includes(e.target.value)
+          )
+        );
+      loadUsers();
+    });
+
+    // 🔓 Logout
+    function logout() {
+      sessionStorage.clear();
+      window.location = 'login.html';
+    }
+  </script>
+
+</body>
+</html>
